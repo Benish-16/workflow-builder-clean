@@ -1,0 +1,6 @@
+[submodule "Desktop/newc/build/external/crow"]
+	path = Desktop/newc/build/external/crow
+	url = https://github.com/CrowCpp/Crow.git
+[submodule "Desktop/newc/build/external/asio"]
+	path = Desktop/newc/build/external/asio
+	url = https://github.com/chriskohlhoff/asio.git
