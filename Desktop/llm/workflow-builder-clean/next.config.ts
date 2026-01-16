@@ -2,18 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  
-  // 1. Move outside of 'experimental' for Next.js 16
-  serverExternalPackages: ["@prisma/client", "ffmpeg-static", "fluent-ffmpeg"],
-
-  // 2. Comprehensive Prisma tracing
+  // Force a single CPU to prevent memory crashes during optimization
+  experimental: {
+    cpus: 1, 
+    workerThreads: false,
+  },
+  serverExternalPackages: ["@prisma/client", "ffmpeg-static"],
   outputFileTracingIncludes: {
     '/api/**/*': ['./node_modules/.prisma/client/**/*'],
-    '/**/*': ['./node_modules/.prisma/client/**/*'], // Added global fallback
   },
-
-  // 3. Recommended: Explicitly enable Cache Components if using Next 16 features
-  // cacheComponents: true, 
 };
 
 export default nextConfig;
