@@ -1,6 +1,9 @@
-import type { NextConfig } from "next";
+// next.config.js
 
-const nextConfig: NextConfig = {
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
   // 1. Force Next.js to use only 1 worker (prevents out-of-memory crashes)
   experimental: {
     workerThreads: false,
@@ -15,4 +18,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
