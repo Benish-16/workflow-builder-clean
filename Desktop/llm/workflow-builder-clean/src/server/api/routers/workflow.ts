@@ -1,4 +1,4 @@
-import { router, publicProcedure } from '@/src/server/trpc';
+import { router, publicProcedure } from '../../trpc'; // Add an extra ../
 import { z } from 'zod';
 
 export const workflowRouter = router({
