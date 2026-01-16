@@ -1,0 +1,91 @@
+// =======================
+// PRISMA SCHEMA (FINAL)
+// =======================
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// =======================
+// ENUMS
+// =======================
+
+enum RunStatus {
+  running
+  success
+  failed
+  partial
+}
+
+enum NodeStatus {
+  skipped
+  running
+  success
+  failed
+}
+
+// =======================
+// WORKFLOW MODELS
+// =======================
+
+model Workflow {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+
+  nodes     Node[]
+  runs      WorkflowRun[]
+}
+
+model Node {
+  id         Int      @id @default(autoincrement())
+  workflowId Int
+  type       String
+  data       Json
+  x          Float
+  y          Float
+
+  workflow   Workflow @relation(fields: [workflowId], references: [id])
+  executions NodeExecution[]
+}
+
+// =======================
+// EXECUTION HISTORY
+// =======================
+
+model WorkflowRun {
+  id         String    @id @default(uuid())
+  workflowId Int
+  status     RunStatus
+  scope      String     // full | single | selected
+  duration   Int        // milliseconds
+  createdAt  DateTime   @default(now())
+
+  workflow       Workflow       @relation(fields: [workflowId], references: [id])
+  nodeExecutions NodeExecution[]
+}
+
+model NodeExecution {
+  id            Int        @id @default(autoincrement())
+
+  runId         String
+  nodeId        Int
+  nodeType      String
+
+  status        NodeStatus
+  order         Int
+  executionTime Float      @default(0)
+
+  inputs        Json?
+  outputs       Json?
+
+  createdAt     DateTime   @default(now())
+
+  run           WorkflowRun @relation(fields: [runId], references: [id])
+  node          Node        @relation(fields: [nodeId], references: [id])
+}
